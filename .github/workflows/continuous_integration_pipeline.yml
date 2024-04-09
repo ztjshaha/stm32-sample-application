@@ -112,11 +112,7 @@ jobs:
         with:
           name: stm32-firmware-sample_application-${{ steps.version_handling.outputs.file_postfix }}
           path: stm32-firmware
-  build-test:
-    name : Build Unit test
-    runs-on: ubuntu-20.04
-    steps:
-      - name: Build cmocka  
+      - name : Build Unit test
         run : | 
               cd applications/sample_application/test
               make
