@@ -1,7 +1,7 @@
 vpath %.c ../sources
 
-INCLUDE_DIRS = -I ../sources
-INCLUDE_DIRS += -I $(CMOCKA_DIR)/include
+INCLUDE_DIRS = -I../sources
+INCLUDE_DIRS += -I$(CMOCKA_DIR)/include
 
 CFLAGS	= $(INCLUDE_DIRS)
 

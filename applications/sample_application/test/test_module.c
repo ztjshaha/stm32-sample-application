@@ -6,7 +6,7 @@
 
 #include "module.h"
 
-#include "module.c"
+//#include "module.c"
 
 typedef struct {int input; int expected;} vector_t;
 
