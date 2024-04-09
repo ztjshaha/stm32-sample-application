@@ -1,4 +1,6 @@
 __pycache__
+applications/*/.metadata/*
+applications/*/targets/.project
 applications/*/targets/STM32/Release/*
 applications/*/targets/STM32/Debug/*
 applications/*/targets/STM32/.mxproject
