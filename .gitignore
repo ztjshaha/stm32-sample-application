@@ -6,5 +6,9 @@ applications/*/targets/*/*/Debug/*
 applications/*/targets/*/*/.mxproject
 applications/*/targets/*/*/.settings/language.settings.xml
 applications/*/targets/*/*/.settings/stm32cubeide.project.prefs
+
+applications/*/test/cmocka
+applications/*/test/obj
+
 docs/build/*
 
