@@ -68,7 +68,10 @@ jobs:
       - name: Build the sample_application binary
         uses: xanderhendriks/action-build-stm32cubeide@v12.0
         with:
-          project-path: 'applications/sample_application/targets/STM32'
+          project-path: 'applications/sample_application/targets/template/STM32L4'
+          project-target: 'sample_application'
+        with:
+          project-path: 'applications/sample_application/targets/template/STM32F4'
           project-target: 'sample_application'
         env:
           ENV_VERSION_MAJOR: ${{ steps.version_handling.outputs.major }}
@@ -78,10 +81,10 @@ jobs:
       - name: Rename and copy files
         run: |
           mkdir stm32-firmware
-          cp applications/sample_application/targets/STM32/Release/sample_application.bin stm32-firmware/sample_application-${{ steps.version_handling.outputs.file_postfix }}.bin
-          cp applications/sample_application/targets/STM32/Release/sample_application.elf stm32-firmware/sample_application-${{ steps.version_handling.outputs.file_postfix }}.elf
-          cp applications/sample_application/targets/STM32/Release/sample_application.list stm32-firmware/sample_application-${{ steps.version_handling.outputs.file_postfix }}.list
-          cp applications/sample_application/targets/STM32/Release/sample_application.map stm32-firmware/sample_application-${{ steps.version_handling.outputs.file_postfix }}.map
+          cp applications/sample_application/targets/template/STM32L4/Release/sample_application.bin stm32-firmware/sample_application-${{ steps.version_handling.outputs.file_postfix }}.bin
+          cp applications/sample_application/targets/template/STM32L4/Release/sample_application.elf stm32-firmware/sample_application-${{ steps.version_handling.outputs.file_postfix }}.elf
+          cp applications/sample_application/targets/template/STM32L4/Release/sample_application.list stm32-firmware/sample_application-${{ steps.version_handling.outputs.file_postfix }}.list
+          cp applications/sample_application/targets/template/STM32L4/Release/sample_application.map stm32-firmware/sample_application-${{ steps.version_handling.outputs.file_postfix }}.map
       - name: Upload sample_application artifacts
         uses: actions/upload-artifact@v3.1.0
         with:
