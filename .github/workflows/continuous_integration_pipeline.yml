@@ -81,13 +81,23 @@ jobs:
         uses: xanderhendriks/action-build-stm32cubeide@v12.0    
         with:
           project-path: 'applications/sample_application/targets/template/STM32F4'
-          project-target: 'sample_application'
+          project-target: 'STM32F4'
         env:
           ENV_VERSION_MAJOR: ${{ steps.version_handling.outputs.major }}
           ENV_VERSION_MINOR: ${{ steps.version_handling.outputs.minor }}
           ENV_VERSION_BUGFIX: ${{ steps.version_handling.outputs.bugfix }}
           ENV_SHORT_GIT_HASH: ${{ steps.short-sha.outputs.sha }}
-          
+      - name: Build the STM32F1 binary
+        uses: xanderhendriks/action-build-stm32cubeide@v12.0    
+        with:
+          project-path: 'applications/sample_application/targets/template/STM32F1'
+          project-target: 'STM32F1'
+        env:
+          ENV_VERSION_MAJOR: ${{ steps.version_handling.outputs.major }}
+          ENV_VERSION_MINOR: ${{ steps.version_handling.outputs.minor }}
+          ENV_VERSION_BUGFIX: ${{ steps.version_handling.outputs.bugfix }}
+          ENV_SHORT_GIT_HASH: ${{ steps.short-sha.outputs.sha }}
+             
       - name: Rename and copy files
         run: |
           mkdir stm32-firmware
