@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - master
+      - develop
+      - ci/cd
   pull_request:
   workflow_dispatch:
     inputs:
@@ -70,14 +72,32 @@ jobs:
         with:
           project-path: 'applications/sample_application/targets/template/STM32L4'
           project-target: 'sample_application'
-        with:
-          project-path: 'applications/sample_application/targets/template/STM32F4'
-          project-target: 'sample_application'
         env:
           ENV_VERSION_MAJOR: ${{ steps.version_handling.outputs.major }}
           ENV_VERSION_MINOR: ${{ steps.version_handling.outputs.minor }}
           ENV_VERSION_BUGFIX: ${{ steps.version_handling.outputs.bugfix }}
           ENV_SHORT_GIT_HASH: ${{ steps.short-sha.outputs.sha }}
+      - name: Build the STM32F4 binary
+        uses: xanderhendriks/action-build-stm32cubeide@v12.0    
+        with:
+          project-path: 'applications/sample_application/targets/template/STM32F4'
+          project-target: 'STM32F4'
+        env:
+          ENV_VERSION_MAJOR: ${{ steps.version_handling.outputs.major }}
+          ENV_VERSION_MINOR: ${{ steps.version_handling.outputs.minor }}
+          ENV_VERSION_BUGFIX: ${{ steps.version_handling.outputs.bugfix }}
+          ENV_SHORT_GIT_HASH: ${{ steps.short-sha.outputs.sha }}
+      - name: Build the STM32F1 binary
+        uses: xanderhendriks/action-build-stm32cubeide@v12.0    
+        with:
+          project-path: 'applications/sample_application/targets/template/STM32F1'
+          project-target: 'STM32F1'
+        env:
+          ENV_VERSION_MAJOR: ${{ steps.version_handling.outputs.major }}
+          ENV_VERSION_MINOR: ${{ steps.version_handling.outputs.minor }}
+          ENV_VERSION_BUGFIX: ${{ steps.version_handling.outputs.bugfix }}
+          ENV_SHORT_GIT_HASH: ${{ steps.short-sha.outputs.sha }}
+             
       - name: Rename and copy files
         run: |
           mkdir stm32-firmware
@@ -90,6 +110,10 @@ jobs:
         with:
           name: stm32-firmware-sample_application-${{ steps.version_handling.outputs.file_postfix }}
           path: stm32-firmware
+      - name : Build Unit test
+        run : | 
+              cd applications/sample_application/test
+              make
   build-docs:
     needs: analyse-code
     name: Build documentation
