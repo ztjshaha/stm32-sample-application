@@ -1,25 +1,63 @@
 #include "../include/emmV5.h"
 
-int emmV5readMotorTargetPosition(uint32_t addr)
+sdkErr_t emmV5EnControl(uint8_t addr, bool state, bool snF)
 {
-	uint8_t buffer[2] = {0x34,0x6B};
-	if( can_send_msg(addr,buffer,2) != HAL_OK)
+  uint8_t buffer[16] = {0};
+
+  buffer[0] =  0xF3;
+  buffer[1] =  0xAB;
+  buffer[2] =  (uint8_t)state;
+  buffer[3] =  snF;
+  buffer[4] =  0x6B;
+
+	if( can_send_msg(addr,buffer,5) != SDK_OK)
 	{
-		return HAL_ERROR;
+		return SDK_ERR;
 	}
 
-	return HAL_OK;
+	return SDK_OK;
 }
 
-int emmV5readMotorSpeed(uint32_t addr)
+sdkErr_t emmV5ModifyCtrlMode(uint8_t addr, bool svF, uint8_t ctrl_mode)
+{
+  uint8_t buffer[16] = {0};
+
+  buffer[0] =  0x46;
+  buffer[1] =  0x69;
+  buffer[2] =  svF;
+  buffer[3] =  ctrl_mode;
+  buffer[4] =  0x6B;
+
+  if( can_send_msg(addr,buffer,5) != SDK_OK)
+  {
+	  return SDK_ERR;
+  }
+  return SDK_OK;
+}
+
+sdkErr_t emmV5readMotorTargetPosition(uint32_t addr)
+{
+	uint8_t buffer[2] = {0x34,0x6B};
+	if( can_send_msg(addr,buffer,2) != SDK_OK)
+	{
+		return SDK_ERR;
+	}
+
+	return SDK_OK;
+}
+
+sdkErr_t emmV5readMotorSpeed(uint32_t addr)
 {
 	uint8_t buffer[2] = {0x35,0x6B};
-	can_send_msg(addr,buffer,2);
-	return 0;
+	if( can_send_msg(addr,buffer,2) != SDK_OK)
+	{
+		return SDK_ERR;
+	}
 
+	return SDK_OK;
 }
 
-int emmV5ResetCurPosToZero(uint32_t addr)
+sdkErr_t emmV5ResetCurPosToZero(uint32_t addr)
 {
     uint8_t buffer[16] = {0x00};
 
@@ -27,11 +65,15 @@ int emmV5ResetCurPosToZero(uint32_t addr)
     buffer[1] =  0x6D;
     buffer[2] =  0x6B;
 
-	can_send_msg(addr,buffer,3);
-	return 0;
+	if( can_send_msg(addr,buffer,3) != SDK_OK)
+	{
+		return SDK_ERR;
+	}
+
+	return SDK_OK;
 }
 
-int emmV5ResetClogPro(uint32_t addr)
+sdkErr_t emmV5ResetClogPro(uint32_t addr)
 {
     uint8_t buffer[16] = {0x00};
 
@@ -39,11 +81,15 @@ int emmV5ResetClogPro(uint32_t addr)
     buffer[1] =  0x52;
     buffer[2] =  0x6B;
 
-	can_send_msg(addr,buffer,3);
-	return 0;
+	if( can_send_msg(addr,buffer,3) != SDK_OK)
+	{
+		return SDK_ERR;
+	}
+
+	return SDK_OK;
 }
 
-int emmV5VelControl(uint32_t addr, uint8_t dir, uint16_t vel, uint8_t acc, bool snF)
+sdkErr_t emmV5VelControl(uint32_t addr, uint8_t dir, uint16_t vel, uint8_t acc, bool snF)
 {
     uint8_t buffer[16] = {0x00};
     uint8_t check=0;
@@ -55,9 +101,9 @@ int emmV5VelControl(uint32_t addr, uint8_t dir, uint16_t vel, uint8_t acc, bool 
     buffer[5] =  snF;
     buffer[6] =  0x6B;
 
-	if( can_send_msg(addr,buffer,7) != HAL_OK)
+	if( can_send_msg(addr,buffer,7) != SDK_OK)
 	{
-		return HAL_ERROR;
+		return SDK_ERR;
 	}
 
 	while(can.rxFrameFlag == false);
@@ -70,15 +116,14 @@ int emmV5VelControl(uint32_t addr, uint8_t dir, uint16_t vel, uint8_t acc, bool 
 	}
 	can.rxFrameFlag = false;
 	if(check == 0)
-		return HAL_ERROR;
+		return SDK_ERR;
 	else
-	return HAL_OK;
+	return SDK_OK;
 }
-int emmV5PosControl(uint32_t addr, uint8_t dir, uint16_t vel, uint8_t acc, uint32_t clk, bool raF, bool snF)
+sdkErr_t emmV5PosControl(uint32_t addr, uint8_t dir, uint16_t vel, uint8_t acc, uint32_t clk, bool raF, bool snF)
 {
   uint8_t buffer0[8] = {0x00};
   uint8_t buffer1[8] = {0x00};
-
   buffer0[0]  =  0xFD;                      // 功能码
   buffer0[1]  =  dir;                       // 方向
   buffer0[2]  =  (uint8_t)(vel >> 8);       // 速度(RPM)高8位字节
@@ -94,22 +139,21 @@ int emmV5PosControl(uint32_t addr, uint8_t dir, uint16_t vel, uint8_t acc, uint3
   buffer1[3] =  snF;                       // 多机同步运动标志，false为不启用，true为启用
   buffer1[4] =  0x6B;                      // 校验字节
 
-  if( can_send_msg(addr,buffer0,8) != HAL_OK)
+  if( can_send_msg(addr,buffer0,8) != SDK_OK)
   {
-      return HAL_ERROR;
+      return SDK_ERR;
   }
-  if( can_send_msg(addr+1,buffer1,5) != HAL_OK)
+  if( can_send_msg(addr+1,buffer1,5) != SDK_OK)
   {
-      return HAL_ERROR;
+      return SDK_ERR;
   }
-  return HAL_OK;
+  return SDK_OK;
 }
 
-int emmV5ReadSysParams(uint32_t addr, SysParams_t s)
+sdkErr_t emmV5ReadSysParams(uint32_t addr, SysParams_t s)
 {
   uint8_t i = 0;
   uint8_t buffer[16] = {0x00};
-
 
   switch(s)
   {
@@ -132,11 +176,14 @@ int emmV5ReadSysParams(uint32_t addr, SysParams_t s)
 
   buffer[i] = 0x6B; ++i;
 
-	can_send_msg(addr,buffer,i);
-	return 0;
+  if( can_send_msg(addr,buffer,i) != SDK_OK)
+  {
+	  return SDK_ERR;
+  }
+  return SDK_OK;
 }
 
-int emmV5StopNow(uint32_t addr, bool snF)
+sdkErr_t emmV5StopNow(uint32_t addr, bool snF)
 {
     uint8_t buffer[16] = {0x00};
 
@@ -145,6 +192,111 @@ int emmV5StopNow(uint32_t addr, bool snF)
     buffer[2] =  snF;
     buffer[3] =  0x6B;
 
-	can_send_msg(addr,buffer,4);
-	return 0;
+    if( can_send_msg(addr,buffer,4) != SDK_OK)
+    {
+  	  return SDK_ERR;
+    }
+    return SDK_OK;
+}
+sdkErr_t emmV5Synchronousmotion(uint8_t addr)
+{
+  uint8_t buffer[16] = {0};
+
+  buffer[0] =  0xFF;
+  buffer[1] =  0x66;
+  buffer[2] =  0x6B;
+
+  if( can_send_msg(addr,buffer,3) != SDK_OK)
+  {
+	  return SDK_ERR;
+  }
+  return SDK_OK;
+}
+
+sdkErr_t emmV5OriginSetO(uint8_t addr, bool svF)
+{
+  uint8_t buffer[16] = {0};
+
+  buffer[0] =  0x93;
+  buffer[1] =  0x88;
+  buffer[2] =  svF;
+  buffer[3] =  0x6B;
+
+  if( can_send_msg(addr,buffer,4) != SDK_OK)
+  {
+	  return SDK_ERR;
+  }
+  return SDK_OK;
+}
+
+sdkErr_t emmV5OriginModifyParams(uint8_t addr, bool svF, uint8_t o_mode, uint8_t o_dir, uint16_t o_vel, uint32_t o_tm, uint16_t sl_vel, uint16_t sl_ma, uint16_t sl_ms, bool potF)
+{
+  uint8_t buffer[32] = {0};
+
+
+  buffer[0] =  0x4C;
+  buffer[1] =  0xAE;
+  buffer[2] =  svF;
+  buffer[3] =  o_mode;
+  buffer[4] =  o_dir;
+  buffer[5]  =  (uint8_t)(o_vel >> 8);
+  buffer[6]  =  (uint8_t)(o_vel >> 0);
+  buffer[7]  =  (uint8_t)(o_tm >> 24);
+  if( can_send_msg(addr,buffer,8) != SDK_OK)
+  {
+	  return SDK_ERR;
+  }
+
+  buffer[0]  =  (uint8_t)(o_tm >> 16);
+  buffer[1] =  (uint8_t)(o_tm >> 8);
+  buffer[2] =  (uint8_t)(o_tm >> 0);
+  buffer[3] =  (uint8_t)(sl_vel >> 8);
+  buffer[4] =  (uint8_t)(sl_vel >> 0);
+  buffer[5] =  (uint8_t)(sl_ma >> 8);
+  buffer[6] =  (uint8_t)(sl_ma >> 0);
+  buffer[7] =  (uint8_t)(sl_ms >> 8);
+  if( can_send_msg(addr + 1,buffer,8) != SDK_OK)
+  {
+	  return SDK_ERR;
+  }
+
+  buffer[0] =  (uint8_t)(sl_ms >> 0);
+  buffer[1] =  potF;
+  buffer[2] =  0x6B;
+  if( can_send_msg(addr + 2,buffer,3) != SDK_OK)
+  {
+	  return SDK_ERR;
+  }
+  return SDK_OK;
+}
+
+sdkErr_t emmV5OriginTriggerReturn(uint8_t addr, uint8_t o_mode, bool snF)
+{
+  uint8_t buffer[16] = {0};
+
+  buffer[0] =  0x9A;
+  buffer[1] =  o_mode;
+  buffer[2] =  snF;
+  buffer[3] =  0x6B;
+
+  if( can_send_msg(addr,buffer,4) != SDK_OK)
+  {
+	  return SDK_ERR;
+  }
+  return SDK_OK;
+}
+
+sdkErr_t emmV5OriginInterrupt(uint8_t addr)
+{
+  uint8_t buffer[16] = {0};
+
+  buffer[0] =  0x9C;
+  buffer[1] =  0x48;
+  buffer[2] =  0x6B;
+
+  if( can_send_msg(addr,buffer,3) != SDK_OK)
+  {
+	  return SDK_ERR;
+  }
+  return SDK_OK;
 }

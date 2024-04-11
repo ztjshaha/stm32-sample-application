@@ -3,7 +3,7 @@
 CAN_t can = {0};
 uint8_t RxData[256];
 
-uint8_t can_send_msg(uint32_t id, uint8_t *msg, uint8_t len)
+sdkErr_t can_send_msg(uint32_t id, uint8_t *msg, uint8_t len)
 {
 	uint32_t TxMailbox = CAN_TX_MAILBOX0;
 	can.CAN_TxMsg.StdId = id;
@@ -13,13 +13,13 @@ uint8_t can_send_msg(uint32_t id, uint8_t *msg, uint8_t len)
 	can.CAN_TxMsg.DLC = len;
 	if( HAL_CAN_AddTxMessage(&hcan, &can.CAN_TxMsg,msg, &TxMailbox) != HAL_OK)
 	{
-		return 1;
+		return SDK_CAN_FAIL;
 	}
 	while(HAL_CAN_GetTxMailboxesFreeLevel(&hcan) != 3)
 	{
-		return 0;
+		return SDK_OK;
 	}
-	return 0;
+	return SDK_OK;
 }
 
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
