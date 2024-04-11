@@ -1,10 +1,10 @@
 name: Continuous integration pipeline
 on:
   push:
-    branches:
-      - master
-      - develop
-      - ci/cd
+#    branches:
+#      - master
+#      - develop
+#      - ci/cd
   pull_request:
   workflow_dispatch:
     inputs:
