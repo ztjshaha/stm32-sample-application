@@ -31,9 +31,8 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <stdlib.h>
-#include "stdbool.h"
-#include "stdio.h"
+#include "../../../../../sdk/common/system/include/systemConfig.h"
+#include "../../../../../sdk/include/emmV5.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -43,8 +42,7 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-extern UART_HandleTypeDef huart1;
-extern uint8_t u_buf[256];
+
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -66,8 +64,7 @@ void Error_Handler(void);
 #define led0_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-#define printf(...) HAL_UART_Transmit_IT(&huart1,(uint8_t *)u_buf,\
-									  sprintf((char*)u_buf,__VA_ARGS__));
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

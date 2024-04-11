@@ -29,4 +29,41 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>sdk</name>
+			<type>2</type>
+			<locationURI>PARENT-3-PROJECT_LOC/sdk</locationURI>
+		</link>
+		<link>
+			<name>sdk/include/emmV5.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/sdk/include/emmV5.h</locationURI>
+		</link>
+		<link>
+			<name>sdk/include/message.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/sdk/include/message.h</locationURI>
+		</link>
+		<link>
+			<name>sdk/src/emmV5.c</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/sdk/src/emmV5.c</locationURI>
+		</link>
+		<link>
+			<name>sdk/src/message.c</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/sdk/src/message.c</locationURI>
+		</link>
+		<link>
+			<name>sdk/common/system/include/systemConfig.h</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/sdk/common/system/include/systemConfig.h</locationURI>
+		</link>
+		<link>
+			<name>sdk/common/system/src/systemConfig.c</name>
+			<type>1</type>
+			<locationURI>PARENT-3-PROJECT_LOC/sdk/common/system/src/systemConfig.c</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>
