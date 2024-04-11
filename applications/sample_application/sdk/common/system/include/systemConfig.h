@@ -12,8 +12,8 @@ extern "C" {
 extern UART_HandleTypeDef huart1;
 extern uint8_t u_buf[256];
 
-#define adiPrintf(...) HAL_UART_Transmit_IT(&huart1,(uint8_t *)u_buf,\
-									  sprintf((char*)u_buf,__VA_ARGS__));
+#define printf(...) HAL_UART_Transmit(&huart1,(uint8_t *)u_buf,\
+									  sprintf((char*)u_buf,__VA_ARGS__), 0xFFFF);
 
 #ifdef __cplusplus
 }

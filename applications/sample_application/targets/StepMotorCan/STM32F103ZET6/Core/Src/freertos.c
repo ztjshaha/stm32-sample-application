@@ -157,7 +157,7 @@ void ledBlinkTask02(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	adiPrintf("Start Led toggle 01!\n");
+//	printf("Start Led toggle 123!\n");
 	HAL_GPIO_TogglePin(led1_GPIO_Port, led1_Pin);
 	HAL_GPIO_TogglePin(led0_GPIO_Port, led0_Pin);
 	vTaskDelay(pdMS_TO_TICKS(1000));
@@ -179,9 +179,15 @@ void canTask03(void *argument)
   /* Infinite loop */
   for(;;)
   {
-	emmV5readMotorSpeed(0x01);
-	osDelay(configTICK_RATE_HZ);
-    osDelay(1);
+	  if(KEY0 == 0)
+	  {
+		  printf("Key Busy\n");
+		  emmV5PosControl(0x0100,0,2500,50,3200000,0,0);
+	  }else{
+		  printf("Key free\n");
+	  }
+	  	  osDelay(configTICK_RATE_HZ);
+	  	  osDelay(1);
   }
   /* USER CODE END canTask03 */
 }

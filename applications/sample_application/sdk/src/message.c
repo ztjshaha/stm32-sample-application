@@ -28,12 +28,12 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 	if(HAL_CAN_GetRxMessage(hcan,CAN_RX_FIFO0, &can.CAN_RxMsg,RxData)==HAL_OK)
 	  {
 		can.rxFrameFlag=true;
-		adiPrintf("GetRxMessage, CANID:0x%0lX,DLC:%lu,Data:",can.CAN_RxMsg.ExtId, can.CAN_RxMsg.DLC);
+		printf("GetRxMessage, CANID:0x%0lX,DLC:%lu,Data:",can.CAN_RxMsg.ExtId, can.CAN_RxMsg.DLC);
 		for(i = 0;i < can.CAN_RxMsg.DLC; i++)
 		{
-		    adiPrintf("%02x ", RxData[i]);
+		    printf("%02x ", RxData[i]);
 		}
-		adiPrintf("\n");
+		printf("\n");
 		HAL_CAN_ActivateNotification(hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
 	  }
 }

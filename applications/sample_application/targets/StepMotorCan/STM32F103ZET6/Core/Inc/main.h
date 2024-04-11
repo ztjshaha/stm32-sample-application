@@ -33,6 +33,7 @@ extern "C" {
 /* USER CODE BEGIN Includes */
 #include "../../../../../sdk/common/system/include/systemConfig.h"
 #include "../../../../../sdk/include/emmV5.h"
+#include "gpio.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -58,6 +59,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define key0_Pin GPIO_PIN_4
+#define key0_GPIO_Port GPIOE
 #define led1_Pin GPIO_PIN_5
 #define led1_GPIO_Port GPIOE
 #define led0_Pin GPIO_PIN_5
