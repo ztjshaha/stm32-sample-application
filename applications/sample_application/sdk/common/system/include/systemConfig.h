@@ -19,7 +19,6 @@ extern uint8_t u_buf[256];
  *  \brief Enum of possible Errors Detected by HAL layer to be communicated
  *         to ADI APIs.
  */
-
 typedef enum {
 	SDK_OK = 0,        /*!< SDK function successful. No error Detected */
 	SDK_CAN_FAIL,      /*!< SDK CAN operation failure. CAN controller Down */
@@ -28,6 +27,26 @@ typedef enum {
 	SDK_WARNING,       /*!< SDK function warning that non critical error was detected*/
 	SDK_ERR
 } sdkErr_t;
+
+typedef enum {
+	SM_FREE = 0,
+	SM_RUN,
+	SM_ERROR
+} stepmotor_status_t;
+
+typedef struct stepmotor_device {
+  uint16_t device_id;       // Device ID
+  uint16_t position;       // current position
+  uint16_t target_position; // target position
+  uint16_t acceleration;
+  uint32_t pluse;
+  uint8_t raF;
+  uint8_t snF;
+  uint16_t speed;           // speed
+  stepmotor_status_t status; // Statue: 0 - free, 1 - running，2 - error
+  uint8_t dir;				// dir: 0 - clockwise, 1 - counterclockwise
+  uint8_t ctrl_mode;
+} stepmotor_device_t;
 
 #ifdef __cplusplus
 }
