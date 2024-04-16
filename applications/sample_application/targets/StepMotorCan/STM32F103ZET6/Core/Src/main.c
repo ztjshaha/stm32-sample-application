@@ -46,7 +46,13 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+stepmotor_device_t motor0= {
+		  .device_id = motor0CanAddress,
+		  .position = 0,
+		  .target_position = 0,
+		  .speed = 0,
+		  .status = SM_FREE,
+		};
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

@@ -182,12 +182,12 @@ void canTask03(void *argument)
 	  if(KEY0 == 0)
 	  {
 		  printf("Key Busy\n");
-		  emmV5PosControl(0x0100,0,2500,50,3200000,0,0);
+
+		  emmV5PosControl(&motor0,0,2500,200,320000,0,0);
 	  }else{
 		  printf("Key free\n");
 	  }
-	  	  osDelay(configTICK_RATE_HZ);
-	  	  osDelay(1);
+		vTaskDelay(pdMS_TO_TICKS(10));
   }
   /* USER CODE END canTask03 */
 }

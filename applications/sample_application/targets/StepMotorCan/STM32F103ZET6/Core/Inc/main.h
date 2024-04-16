@@ -43,7 +43,7 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-
+extern stepmotor_device_t motor0;
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/
@@ -67,7 +67,7 @@ void Error_Handler(void);
 #define led0_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-
+#define motor0CanAddress 0x0100
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
