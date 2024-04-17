@@ -101,7 +101,7 @@ jobs:
       - name: Build the StepMotorCan/STM32F103ZET binary
         uses: xanderhendriks/action-build-stm32cubeide@v12.0    
         with:
-          project-path: 'applications/sample_application/targets\StepMotorCan\STM32F103ZET6'
+          project-path: 'applications/sample_application/targets/StepMotorCan/STM32F103ZET6'
           project-target: 'StepMotorCan'
         env:
           ENV_VERSION_MAJOR: ${{ steps.version_handling.outputs.major }}
