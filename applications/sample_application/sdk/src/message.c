@@ -24,16 +24,43 @@ sdkErr_t can_send_msg(uint32_t id, uint8_t *msg, uint8_t len)
 
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
-	uint32_t i = 0;
+//	uint32_t i = 0;
+
 	if(HAL_CAN_GetRxMessage(hcan,CAN_RX_FIFO0, &can.CAN_RxMsg,RxData)==HAL_OK)
 	  {
-		can.rxFrameFlag=true;
-		printf("GetRxMessage, CANID:0x%0lX,DLC:%lu,Data:",can.CAN_RxMsg.ExtId, can.CAN_RxMsg.DLC);
-		for(i = 0;i < can.CAN_RxMsg.DLC; i++)
-		{
-		    printf("%02x ", RxData[i]);
+		if(can.CAN_RxMsg.ExtId ==  motor0.device_id){
+			switch(RxData[0]){
+			case smReadCurSpeed:{
+				if(RxData[1] == 1)
+				{
+					motor0.speed = -((RxData[2] << 8) + RxData[3]);
+				}else
+					motor0.speed = (RxData[2] << 8) + RxData[3];
+				break;
+			}
+			case smReadCurPos:{
+				if(RxData[1] == 1)
+				{
+					motor0.position = -((RxData[2] << 24) + (RxData[3] << 16)+ (RxData[4] << 8) + (RxData[5] << 0));
+				}else
+					motor0.position = (RxData[2] << 24) + (RxData[3] << 16)+ (RxData[4] << 8) + (RxData[5] << 0);
+				motor0.angle = (float)(motor0.position * 360) / 65536;
+				break;
+			}
+			default:
+			        printf("Invalid function mask\n");
+			}
+		}else
+			printf("Fail no motor!\n");
 		}
-		printf("\n");
+
+		can.rxFrameFlag = true;
+//		printf("GetRxMessage, CANID:0x%0lX,DLC:%lu,Data:",can.CAN_RxMsg.ExtId, can.CAN_RxMsg.DLC);
+//		for(i = 0;i < can.CAN_RxMsg.DLC; i++)
+//		{
+//		    printf("%02x ", RxData[i]);
+//		}
+//		printf("\n");
 		HAL_CAN_ActivateNotification(hcan, CAN_IT_RX_FIFO0_MSG_PENDING);
-	  }
 }
+

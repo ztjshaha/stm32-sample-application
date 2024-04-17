@@ -132,7 +132,7 @@ sdkErr_t emmV5PosControl(stepmotor_device_t *device,uint8_t dir, uint16_t vel, u
   device->snF = snF;
   uint8_t buffer0[8] = {0x00};
   uint8_t buffer1[8] = {0x00};
-  buffer0[0]  =  0xFD;                      // 功能码
+  buffer0[0]  =  smPositionModeControl;                      // 功能码
   buffer0[1]  =  device->dir;                       // 方向
   buffer0[2]  =  (uint8_t)(device->speed >> 8);       // 速度(RPM)高8位字节
   buffer0[3]  =  (uint8_t)(device->speed >> 0);       // 速度(RPM)低8位字节
@@ -187,6 +187,11 @@ sdkErr_t emmV5ReadSysParams(stepmotor_device_t *device, SysParams_t s)
   {
 	  return SDK_ERR;
   }
+  while( can.rxFrameFlag == false)
+  {
+	  printf(" emmV5ReadSysParams received error.\n");
+  }
+  can.rxFrameFlag = false;
   return SDK_OK;
 }
 

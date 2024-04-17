@@ -13,7 +13,7 @@ extern UART_HandleTypeDef huart1;
 extern uint8_t u_buf[256];
 
 #define printf(...) HAL_UART_Transmit(&huart1,(uint8_t *)u_buf,\
-									  sprintf((char*)u_buf,__VA_ARGS__), 0xFFFF);
+									  sprintf((char*)u_buf,__VA_ARGS__), 0xffff);
 
 /**
  *  \brief Enum of possible Errors Detected by HAL layer to be communicated
@@ -36,16 +36,17 @@ typedef enum {
 
 typedef struct stepmotor_device {
   uint16_t device_id;       // Device ID
-  uint16_t position;       // current position
+  int32_t position;       // current position
   uint16_t target_position; // target position
   uint16_t acceleration;
   uint32_t pluse;
   uint8_t raF;
   uint8_t snF;
-  uint16_t speed;           // speed
+  int16_t speed;           // speed
   stepmotor_status_t status; // Statue: 0 - free, 1 - running，2 - error
   uint8_t dir;				// dir: 0 - clockwise, 1 - counterclockwise
   uint8_t ctrl_mode;
+  float angle;
 } stepmotor_device_t;
 
 #ifdef __cplusplus

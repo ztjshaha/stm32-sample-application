@@ -51,7 +51,7 @@ uint8_t u_buf[256];
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
-  .stack_size = 128 * 4,
+  .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for ledBlinkTask */
@@ -65,7 +65,7 @@ const osThreadAttr_t ledBlinkTask_attributes = {
 osThreadId_t canTaskHandle;
 const osThreadAttr_t canTask_attributes = {
   .name = "canTask",
-  .stack_size = 128 * 4,
+  .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
 
@@ -75,8 +75,8 @@ const osThreadAttr_t canTask_attributes = {
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
-void ledBlinkTask02(void *argument);
-void canTask03(void *argument);
+void StartTask02(void *argument);
+void StartTask03(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -111,10 +111,10 @@ void MX_FREERTOS_Init(void) {
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* creation of ledBlinkTask */
-  ledBlinkTaskHandle = osThreadNew(ledBlinkTask02, NULL, &ledBlinkTask_attributes);
+  ledBlinkTaskHandle = osThreadNew(StartTask02, NULL, &ledBlinkTask_attributes);
 
   /* creation of canTask */
-  canTaskHandle = osThreadNew(canTask03, NULL, &canTask_attributes);
+  canTaskHandle = osThreadNew(StartTask03, NULL, &canTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -144,52 +144,64 @@ void StartDefaultTask(void *argument)
   /* USER CODE END StartDefaultTask */
 }
 
-/* USER CODE BEGIN Header_ledBlinkTask02 */
+/* USER CODE BEGIN Header_StartTask02 */
 /**
 * @brief Function implementing the ledBlinkTask thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_ledBlinkTask02 */
-void ledBlinkTask02(void *argument)
+/* USER CODE END Header_StartTask02 */
+void StartTask02(void *argument)
 {
-  /* USER CODE BEGIN ledBlinkTask02 */
+  /* USER CODE BEGIN StartTask02 */
   /* Infinite loop */
   for(;;)
   {
-//	printf("Start Led toggle 123!\n");
 	HAL_GPIO_TogglePin(led1_GPIO_Port, led1_Pin);
 	HAL_GPIO_TogglePin(led0_GPIO_Port, led0_Pin);
 	vTaskDelay(pdMS_TO_TICKS(1000));
     osDelay(1);
   }
-  /* USER CODE END ledBlinkTask02 */
+  /* USER CODE END StartTask02 */
 }
 
-/* USER CODE BEGIN Header_canTask03 */
+/* USER CODE BEGIN Header_StartTask03 */
 /**
 * @brief Function implementing the canTask thread.
 * @param argument: Not used
 * @retval None
 */
-/* USER CODE END Header_canTask03 */
-void canTask03(void *argument)
+/* USER CODE END Header_StartTask03 */
+void StartTask03(void *argument)
 {
-  /* USER CODE BEGIN canTask03 */
+  /* USER CODE BEGIN StartTask03 */
   /* Infinite loop */
   for(;;)
   {
 	  if(KEY0 == 0)
 	  {
-		  printf("Key Busy\n");
+		  vTaskDelay(pdMS_TO_TICKS(50));
+		  printf("Key0 Busy\n");
 
-		  emmV5PosControl(&motor0,0,2500,200,320000,0,0);
-	  }else{
-		  printf("Key free\n");
+		  emmV5PosControl(&motor0,0,2500,200,3200,0,0);
 	  }
-		vTaskDelay(pdMS_TO_TICKS(10));
+	  if(KEY1 == 0)
+	  {
+		  vTaskDelay(pdMS_TO_TICKS(50));
+		  printf("Key1 Busy\n");
+		  emmV5ReadSysParams(&motor0,S_CPOS);
+		  printf("pos: %ld\n", motor0.position);
+		  printf("angle: %.1f\n", motor0.angle);
+	  }
+	  if(KEY2 == 0)
+	  {
+		  vTaskDelay(pdMS_TO_TICKS(50));
+		  printf("Key2 Busy\n");
+		  emmV5PosControl(&motor0,1,2500,200,3200,0,0);
+	  }
+	  vTaskDelay(pdMS_TO_TICKS(50));
   }
-  /* USER CODE END canTask03 */
+  /* USER CODE END StartTask03 */
 }
 
 /* Private application code --------------------------------------------------*/

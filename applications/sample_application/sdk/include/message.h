@@ -18,6 +18,7 @@ typedef struct {
 extern CAN_HandleTypeDef hcan;
 extern CAN_t can;
 extern uint8_t RxData[256];
+extern stepmotor_device_t motor0;
 
 uint8_t can_send_msg(uint32_t id, uint8_t *msg, uint8_t len);
 

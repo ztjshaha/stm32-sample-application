@@ -33,7 +33,7 @@ typedef enum {
 	MULLOOPLIMIT  = 3
 }ZeroMode_t;
 
-//define emmV5 Funtion mask
+//define emmV5 Function mask
 #define smEnControl 		0xF3
 #define smSpeedModeControl 	0xF6
 #define smPositionModeControl 	0xFD
