@@ -68,6 +68,13 @@ const osThreadAttr_t canTask_attributes = {
   .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityLow,
 };
+/* Definitions for speedLoopTask */
+osThreadId_t speedLoopTaskHandle;
+const osThreadAttr_t speedLoopTask_attributes = {
+  .name = "speedLoopTask",
+  .stack_size = 128 * 4,
+  .priority = (osPriority_t) osPriorityLow,
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -77,6 +84,7 @@ const osThreadAttr_t canTask_attributes = {
 void StartDefaultTask(void *argument);
 void StartTask02(void *argument);
 void StartTask03(void *argument);
+void StartTask04(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -115,6 +123,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of canTask */
   canTaskHandle = osThreadNew(StartTask03, NULL, &canTask_attributes);
+
+  /* creation of speedLoopTask */
+  speedLoopTaskHandle = osThreadNew(StartTask04, NULL, &speedLoopTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -178,30 +189,67 @@ void StartTask03(void *argument)
   /* Infinite loop */
   for(;;)
   {
+//	  if(KEY0 == 0)
+//	  {
+//		  vTaskDelay(pdMS_TO_TICKS(50));
+//		  printf("Key0 Busy\n");
+//
+//		  emmV5PosControl(&motor0,0,2500,200,3200,0,0);
+//	  }
+//	  if(KEY1 == 0)
+//	  {
+//		  vTaskDelay(pdMS_TO_TICKS(50));
+//		  printf("Key1 Busy\n");
+//		  emmV5ReadSysParams(&motor0,S_CPOS);
+//		  printf("pos: %ld\n", motor0.position);
+//		  printf("angle: %.1f\n", motor0.angle);
+//	  }
+//	  if(KEY2 == 0)
+//	  {
+//		  vTaskDelay(pdMS_TO_TICKS(50));
+//		  printf("Key2 Busy\n");
+//		  emmV5PosControl(&motor0,1,2500,200,3200,0,0);
+//	  }
+	  vTaskDelay(pdMS_TO_TICKS(50));
+  }
+  /* USER CODE END StartTask03 */
+}
+
+/* USER CODE BEGIN Header_StartTask04 */
+/**
+* @brief Function implementing the speedLoopTask thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_StartTask04 */
+void StartTask04(void *argument)
+{
+  /* USER CODE BEGIN StartTask04 */
+  /* Infinite loop */
+  for(;;)
+  {
 	  if(KEY0 == 0)
 	  {
 		  vTaskDelay(pdMS_TO_TICKS(50));
 		  printf("Key0 Busy\n");
-
-		  emmV5PosControl(&motor0,0,2500,200,3200,0,0);
+		  emmV5VelControl(&motor0,0,500,200,0);
 	  }
 	  if(KEY1 == 0)
 	  {
 		  vTaskDelay(pdMS_TO_TICKS(50));
 		  printf("Key1 Busy\n");
-		  emmV5ReadSysParams(&motor0,S_CPOS);
-		  printf("pos: %ld\n", motor0.position);
-		  printf("angle: %.1f\n", motor0.angle);
+		  emmV5ReadSysParams(&motor0,S_VEL);
+		  printf("speed: %d\n", motor0.speed);
 	  }
 	  if(KEY2 == 0)
 	  {
 		  vTaskDelay(pdMS_TO_TICKS(50));
 		  printf("Key2 Busy\n");
-		  emmV5PosControl(&motor0,1,2500,200,3200,0,0);
+		  emmV5VelControl(&motor0,1,500,200,0);
 	  }
-	  vTaskDelay(pdMS_TO_TICKS(50));
+    osDelay(1);
   }
-  /* USER CODE END StartTask03 */
+  /* USER CODE END StartTask04 */
 }
 
 /* Private application code --------------------------------------------------*/

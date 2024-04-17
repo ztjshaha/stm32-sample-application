@@ -30,6 +30,9 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 	  {
 		if(can.CAN_RxMsg.ExtId ==  motor0.device_id){
 			switch(RxData[0]){
+			case 00:{
+				printf("error Instruction!\n");
+			}
 			case smReadCurSpeed:{
 				if(RxData[1] == 1)
 				{
