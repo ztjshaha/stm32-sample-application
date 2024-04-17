@@ -50,6 +50,13 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 				motor0.angle = (float)(motor0.position * 360) / 65536;
 				break;
 			}
+			case smReadStatusFlag:{
+				motor0.status.SM_EN = RxData[1] & 0x01;
+				motor0.status.SM_READY = RxData[1] & 0x02;
+				motor0.status.SM_STALL = RxData[1] & 0x04;
+				motor0.status.SM_STALLPRO = RxData[1] & 0x08;
+				break;
+			}
 			default:
 			        printf("Invalid function mask\n");
 			}

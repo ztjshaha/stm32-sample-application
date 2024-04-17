@@ -52,7 +52,6 @@ stepmotor_device_t motor0= {
 		  .position = 0,
 		  .target_position = 0,
 		  .speed = 0,
-		  .status = SM_FREE,
 		};
 /* USER CODE END PV */
 

@@ -1,13 +1,13 @@
 #include "../include/emmV5.h"
 
-sdkErr_t emmV5EnControl(stepmotor_device_t *device,stepmotor_status_t state, bool snF)
+sdkErr_t emmV5EnControl(stepmotor_device_t *device,bool state, bool snF)
 {
   uint8_t buffer[16] = {0};
-  device->status = state;
+  device->status.SM_EN = state;
   device->snF = snF;
   buffer[0] =  smEnControl;
   buffer[1] =  0xAB;
-  buffer[2] =  device->status;
+  buffer[2] =  device->status.SM_EN;
   buffer[3] =  device->snF;
   buffer[4] =  0x6B;
 
@@ -15,7 +15,11 @@ sdkErr_t emmV5EnControl(stepmotor_device_t *device,stepmotor_status_t state, boo
   {
 	return SDK_ERR;
   }
-
+  while( can.rxFrameFlag == false)
+  {
+	  printf(" emmV5EnControl received error.\n");
+  }
+  can.rxFrameFlag = false;
   return SDK_OK;
 }
 

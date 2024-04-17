@@ -28,14 +28,41 @@ typedef enum {
 	SDK_ERR
 } sdkErr_t;
 
-typedef enum {
-	SM_FREE = 0,
-	SM_RUN,
-	SM_ERROR
+typedef struct stepmotor_status {
+	uint8_t SM_EN;
+	uint8_t SM_READY;
+	uint8_t SM_STALL;
+	uint8_t SM_STALLPRO;
+	uint8_t SM_ERROR;
 } stepmotor_status_t;
+typedef struct driverConfigParams{
+	uint8_t lenthBytes;
+	uint8_t ConfigParamNum;
+	uint8_t motorMode;
+	uint8_t PulCtrl;
+	uint8_t CommMode;
+	uint8_t En;
+	uint8_t Dir;
+	uint8_t resolution;
+	uint8_t resolutionCal;
+	uint8_t autoLcdDisable;
+	uint16_t oLoopCur;
+	uint16_t cLStallMaxCur;
+	uint16_t cLMaxVlotage;
+	uint8_t uartBand;
+	uint8_t canBand;
+	uint16_t device_id; // Device ID
+	uint8_t CommChecksum;
+	uint8_t ctrlInstructionResp;
+	uint8_t StallPro;
+	uint16_t StallProSpeedThread;
+	uint16_t StallProCurThread;
+	uint16_t StallProTimeThread;
+} driverConfigParams_t;
 
 typedef struct stepmotor_device {
-  uint16_t device_id;       // Device ID
+  driverConfigParams_t driver;
+  uint16_t device_id;
   int32_t position;       // current position
   uint16_t target_position; // target position
   uint16_t acceleration;

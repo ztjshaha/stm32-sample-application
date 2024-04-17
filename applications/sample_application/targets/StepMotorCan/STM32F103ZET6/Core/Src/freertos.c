@@ -230,12 +230,14 @@ void StartTask04(void *argument)
   {
 	  if(KEY0 == 0)
 	  {
+		  emmV5EnControl(&motor0,1,0);
 		  vTaskDelay(pdMS_TO_TICKS(50));
 		  printf("Key0 Busy\n");
 		  emmV5VelControl(&motor0,0,500,200,0);
 	  }
 	  if(KEY1 == 0)
 	  {
+		  emmV5EnControl(&motor0,0,0);
 		  vTaskDelay(pdMS_TO_TICKS(50));
 		  printf("Key1 Busy\n");
 		  emmV5ReadSysParams(&motor0,S_VEL);
@@ -243,6 +245,7 @@ void StartTask04(void *argument)
 	  }
 	  if(KEY2 == 0)
 	  {
+		  emmV5EnControl(&motor0,1,0);
 		  vTaskDelay(pdMS_TO_TICKS(50));
 		  printf("Key2 Busy\n");
 		  emmV5VelControl(&motor0,1,500,200,0);
