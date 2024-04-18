@@ -35,6 +35,7 @@ typedef struct stepmotor_status {
 	uint8_t SM_STALLPRO;
 	uint8_t SM_ERROR;
 } stepmotor_status_t;
+
 typedef struct driverConfigParams{
 	uint8_t lenthBytes;
 	uint8_t ConfigParamNum;

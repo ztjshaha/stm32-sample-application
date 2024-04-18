@@ -25,7 +25,6 @@ sdkErr_t can_send_msg(uint32_t id, uint8_t *msg, uint8_t len)
 void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 {
 //	uint32_t i = 0;
-
 	if(HAL_CAN_GetRxMessage(hcan,CAN_RX_FIFO0, &can.CAN_RxMsg,RxData)==HAL_OK)
 	  {
 		if(can.CAN_RxMsg.ExtId ==  motor0.device_id){
@@ -62,9 +61,9 @@ void HAL_CAN_RxFifo0MsgPendingCallback(CAN_HandleTypeDef *hcan)
 			}
 		}else
 			printf("Fail no motor!\n");
-		}
-
+	  }
 		can.rxFrameFlag = true;
+//
 //		printf("GetRxMessage, CANID:0x%0lX,DLC:%lu,Data:",can.CAN_RxMsg.ExtId, can.CAN_RxMsg.DLC);
 //		for(i = 0;i < can.CAN_RxMsg.DLC; i++)
 //		{

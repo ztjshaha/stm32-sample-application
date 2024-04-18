@@ -6,11 +6,9 @@ extern "C" {
 #endif
 #include "main.h"
 #include "stdbool.h"
-
 typedef struct {
 	CAN_RxHeaderTypeDef CAN_RxMsg;
 	CAN_TxHeaderTypeDef CAN_TxMsg;
-
 	bool rxFrameFlag;
 }CAN_t;
 
