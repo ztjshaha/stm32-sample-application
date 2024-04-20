@@ -59,6 +59,7 @@ typedef struct driverConfigParams{
 	uint16_t StallProSpeedThread;
 	uint16_t StallProCurThread;
 	uint16_t StallProTimeThread;
+	uint16_t arrived;
 } driverConfigParams_t;
 
 typedef struct stepmotor_device {

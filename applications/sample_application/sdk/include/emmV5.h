@@ -33,6 +33,21 @@ typedef enum {
 	MULLOOPLIMIT  = 3
 }ZeroMode_t;
 
+//define motor config
+#define step_angle 1.8
+#define microstepping 16
+
+#define gear_ratio 0.031875
+
+//define rail
+#define railLength 385
+
+typedef struct railCoordinate{
+	uint16_t x;
+	uint16_t encoder;
+	bool rxFrameFlag;
+}railCoordinate_t;
+
 //define emmV5 Function mask
 #define smEnControl 		0xF3 //verify
 #define smSpeedModeControl 	0xF6 //ready
@@ -78,7 +93,7 @@ typedef enum {
 
 sdkErr_t emmV5EnControl(stepmotor_device_t *device, bool state, bool snF); //verify
 sdkErr_t emmV5ModifyCtrlMode(stepmotor_device_t *device, bool snF, uint8_t ctrl_mode);
-sdkErr_t emmV5PosControl(stepmotor_device_t *device,uint8_t dir, uint16_t vel, uint8_t acc, uint32_t clk, bool raF, bool snF); //verify
+sdkErr_t emmV5PosControl(stepmotor_device_t *device,uint8_t dir, uint16_t vel, uint16_t acc, float distance, bool raF, bool snF);
 sdkErr_t emmV5readMotorTargetPosition(stepmotor_device_t *device);
 sdkErr_t emmV5readMotorSpeed(stepmotor_device_t *device);
 sdkErr_t emmV5ResetCurPosToZero(stepmotor_device_t *device);

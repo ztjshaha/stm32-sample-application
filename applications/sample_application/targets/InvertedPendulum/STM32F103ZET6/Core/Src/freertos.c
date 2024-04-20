@@ -40,7 +40,7 @@
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
+	int taskStatus = 0;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -51,7 +51,7 @@ uint8_t u_buf[256];
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
   .name = "defaultTask",
-  .stack_size = 128 * 4,
+  .stack_size = 256 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* Definitions for stallCheck */
@@ -133,11 +133,12 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
+
   /* Infinite loop */
   for(;;)
   {
-	printf("helo");
-    osDelay(1);
+
+	  vTaskDelay(pdMS_TO_TICKS(50));
   }
   /* USER CODE END StartDefaultTask */
 }
@@ -152,10 +153,52 @@ void StartDefaultTask(void *argument)
 void stallCheckTask(void *argument)
 {
   /* USER CODE BEGIN stallCheckTask */
+
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+
+	  	  emmV5ReadSysParams(&motor0,S_Conf);
+	  	vTaskDelay(pdMS_TO_TICKS(5000));
+	  	  if(emmV5ReadSysParams(&motor0,S_FLAG) == SDK_OK)
+	  	  {
+	  		printf("ReadSysParams success~ \n");
+	  	  }
+		  while( motor0.status.SM_STALLPRO == 0)
+		  {
+			  if(emmV5EnControl(&motor0, 1, 0) == SDK_OK)
+			  {
+				  printf("emmV5EnControl success~ \n");
+			  }
+			  if(emmV5PosControl(&motor0,0,500,200,railLength,0,0) == SDK_OK)
+			  {
+			  		printf("emmV5PosControl success~ \n");
+			  }
+			  vTaskDelay(pdMS_TO_TICKS(5000));
+
+		  	  if(emmV5ReadSysParams(&motor0,S_FLAG) == SDK_OK)
+		  	  {
+		  		printf("ReadSysParams success~ \n");
+		  	  }
+
+		  }
+		  if(emmV5ClearStallPro(&motor0) == SDK_OK)
+		  {
+			  printf("emmV5ClearStallPro success~ \n");
+		  }
+		  if(emmV5EnControl(&motor0, 0, 0) == SDK_OK)
+		  {
+			  printf("emmV5DisControl success~ \n");
+		  }
+
+		  emmV5ReadSysParams(&motor0,S_FLAG);
+  	  	  if( motor0.status.SM_EN == 0){
+  	  		 	  	  emmV5EnControl(&motor0, 1, 0);
+  	  		  		  emmV5PosControl(&motor0,1,1500,200,railLength/2,0,0);
+  	  		  	vTaskDelay(pdMS_TO_TICKS(5000));
+  		  }
+  	  	  vTaskDelete(NULL);
+	  vTaskDelay(pdMS_TO_TICKS(50));
   }
   /* USER CODE END stallCheckTask */
 }

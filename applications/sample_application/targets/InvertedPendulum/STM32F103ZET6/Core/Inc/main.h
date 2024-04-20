@@ -34,6 +34,7 @@ extern "C" {
 #include "../../../../../sdk/common/system/include/systemConfig.h"
 #include "../../../../../sdk/include/emmV5.h"
 #include "gpio.h"
+#include "can.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

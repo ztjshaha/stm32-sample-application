@@ -33,7 +33,11 @@ extern "C" {
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */
+#define KEY0        HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_4)  //KEY0按键PE4
+#define KEY1        HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_3)  //KEY1按键PE3
+#define KEY2        HAL_GPIO_ReadPin(GPIOE,GPIO_PIN_2)  //KEY2按键PE2
 
+#define KEY0_PRES 	1
 /* USER CODE END Private defines */
 
 void MX_GPIO_Init(void);

@@ -17,7 +17,7 @@ sdkErr_t emmV5EnControl(stepmotor_device_t *device,bool state, bool snF)
   }
   while( can.rxFrameFlag == false)
   {
-	  printf(" emmV5EnControl received error.\n");
+//	  printf(" emmV5EnControl received error.\n");
   }
   can.rxFrameFlag = false;
   return SDK_OK;
@@ -126,12 +126,13 @@ sdkErr_t emmV5VelControl(stepmotor_device_t *device, uint8_t dir, uint16_t vel, 
 	return SDK_OK;
 }
 
-sdkErr_t emmV5PosControl(stepmotor_device_t *device,uint8_t dir, uint16_t vel, uint8_t acc, uint32_t clk, bool raF, bool snF)
+sdkErr_t emmV5PosControl(stepmotor_device_t *device,uint8_t dir, uint16_t vel, uint16_t acc, float distance, bool raF, bool snF)
 {
+  if(distance > railLength) distance = 0;
   device->dir = dir;
   device->speed = vel;
   device->acceleration = acc;
-  device->pluse = clk;
+  device->pluse = (int)distance / gear_ratio;
   device->raF = raF;
   device->snF = snF;
   uint8_t buffer0[8] = {0x00};
@@ -145,7 +146,7 @@ sdkErr_t emmV5PosControl(stepmotor_device_t *device,uint8_t dir, uint16_t vel, u
   buffer0[6]  =  (uint8_t)(device->pluse >> 16);      // 脉冲数(bit16 - bit23)
   buffer0[7] =  (uint8_t)(device->pluse >> 8);       // 脉冲数(bit8  - bit15)
 
-  buffer1[0]  =  0xFD;                      // 功能码
+  buffer1[0]  =  smPositionModeControl;                      // 功能码
   buffer1[1] =  (uint8_t)(device->pluse >> 0);       // 脉冲数(bit0  - bit7 )
   buffer1[2] =  device->raF;                       // 相位/绝对标志，false为相对运动，true为绝对值运动
   buffer1[3] =  device->snF;                       // 多机同步运动标志，false为不启用，true为启用
@@ -193,7 +194,7 @@ sdkErr_t emmV5ReadSysParams(stepmotor_device_t *device, SysParams_t s)
   }
   while( can.rxFrameFlag == false)
   {
-	  printf(" emmV5ReadSysParams received error.\n");
+//	  printf(" emmV5ReadSysParams received error.\n");
   }
   can.rxFrameFlag = false;
   return SDK_OK;
